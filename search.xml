@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/04/30/hello-world/posts/16107/alg%20--%20Algorithm%20(currently%20support%20crc16%20and%20crc32,%20which%20crc16%20is%20default)</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>使用Docker快速部署trojan协议</title>
+    <url>/2020/05/01/%E4%BD%BF%E7%94%A8Docker%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2trojan%E5%8D%8F%E8%AE%AE/posts/undefined/alg%20--%20Algorithm%20(currently%20support%20crc16%20and%20crc32,%20which%20crc16%20is%20default)</url>
+    <content><![CDATA[<h2 id="1-使用脚本配置证书"><a href="#1-使用脚本配置证书" class="headerlink" title="1 使用脚本配置证书"></a>1 使用脚本配置证书</h2><p>###1.1 安装acme.sh脚本</p>
+<p><code>apt-get update &amp;&amp; apt-get -y install socat //安装socat&quot;</code></p>
+<p><code>wget -qO- get.acme.sh | bash //安装脚本</code></p>
+<p><code>source ~/.bashrc</code></p>
+<p>###1.2 给域名申请证书<br>在你的域名解析服务提供商那里添加好解析记录，假定你的域名baidu.com</p>
+<p><code>export CF_Key=&quot;你的KEY&quot;</code></p>
+<p><code>export CF_Email=&quot;你的邮箱&quot;</code></p>
+<p>###1.3 申请颁发ECC证书</p>
+<p> <code>acme.sh --issue --standalone -d baidu.com -k ec-256</code></p>
+<p>###1.4 安装证书到指定位置</p>
+<pre><code>mkdir /etc/trojan //创建trojan目录
+acme.sh --installcert -d baidu.com --fullchain-file /etc/trojan/trojan.crt --key-file /etc/trojan/trojan.key --ecc</code></pre><h2 id="2-安装配置Caddy"><a href="#2-安装配置Caddy" class="headerlink" title="2 安装配置Caddy"></a>2 安装配置Caddy</h2><p>###2.1 安装caddy</p>
+<figure class="highlight plain"><figcaption><span>-qO-</span><a href="https://getcaddy.com" target="_blank" rel="noopener">| bash -s personal</a></figcaption><table><tr><td class="code"><pre><span class="line">&#96;&#96;&#96;</span><br><span class="line">###2.2which caddy &#x2F;&#x2F;查找caddy位置</span><br><span class="line">&#96;&#96;&#96;&#x2F;usr&#x2F;local&#x2F;bin&#x2F;caddy &#x2F;&#x2F;输出此文本即可</span><br></pre></td></tr></table></figure>
+
+<p>###2.3 创建caddy目录</p>
+<figure class="highlight plain"><figcaption><span>/root/caddy && cd</span><a href="/root/caddy">//创建caddy目录并切换至此</a></figcaption><table><tr><td class="code"><pre><span class="line">&#96;&#96;&#96;</span><br><span class="line">###2.4 创建caddy配置文件Caddyfile</span><br><span class="line">&#96;&#96;&#96;vim Caddyfile &#x2F;&#x2F;创建并开始编辑文件</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span>&#123;</span></figcaption><table><tr><td class="code"><pre><span class="line">  gzip</span><br><span class="line">  log &#x2F;root&#x2F;caddy&#x2F;caddy.log</span><br><span class="line">  proxy &#x2F; https:&#x2F;&#x2F;baidu.com</span><br><span class="line">&#125;&#x2F;&#x2F;以上是文件内容，请稍作修改后添加至文件</span><br></pre></td></tr></table></figure>
+<p>###2.5 注册caddy服务<br><code>cd /etc/systemd/system &amp;&amp; vim caddy.service //切换到此目录下,创建并开始编辑服务文件</code></p>
+<p>//以下是文件内容，请添加至文件<br>[Unit]<br>Description=Caddy Service<br>After=network.target</p>
+<p>[Service]<br>ExecStart=/usr/local/bin/caddy -conf /root/caddy/Caddyfile<br>Restart=on-abort<br>LimitNOFILE=1048576</p>
+<p>[Install]<br>WantedBy=multi-user.target<br>//以上是文件内容，添加至文件</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>trojan</tag>
+      </tags>
+  </entry>
+</search>
